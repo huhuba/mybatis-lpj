@@ -90,18 +90,18 @@ public class XMLConfigBuilder extends BaseBuilder {
     this(new XPathParser(inputStream, true, props, new XMLMapperEntityResolver()), environment, props);
   }
 
-  // 上面的6个构造函数最后都会合流到这个函数，传入XPathParser
-  private XMLConfigBuilder(XPathParser parser, String environment, Properties props) {
-    // 调用父类初始化configuration
-    super(new Configuration());
-    // 错误上下文设置成SQL Mapper Configuration(xml文件配置)
-    ErrorContext.instance().resource("SQL Mapper Configuration");
-    // 将Properties全部设置到configuration里面去
-    this.configuration.setVariables(props);
-    this.parsed = false;
-    this.environment = environment;
-    this.parser = parser;
-  }
+    // 上面的6个构造函数最后都会合流到这个函数，传入XPathParser
+    private XMLConfigBuilder(XPathParser parser, String environment, Properties props) {
+      // 调用父类初始化configuration
+      super(new Configuration());
+      // 错误上下文设置成SQL Mapper Configuration(xml文件配置)
+      ErrorContext.instance().resource("SQL Mapper Configuration");
+      // 将Properties全部设置到configuration里面去
+      this.configuration.setVariables(props);
+      this.parsed = false;
+      this.environment = environment;
+      this.parser = parser;
+    }
 
   /** 解析配置：将MyBatis的配置文件进行解析，将配置文件中配置的元素值赋值到configuration属性中，并将赋值过的configuration给返回 **/
   public Configuration parse() {
@@ -144,7 +144,7 @@ public class XMLConfigBuilder extends BaseBuilder {
       databaseIdProviderElement(root.evalNode("databaseIdProvider"));
       // 类型处理器
       typeHandlerElement(root.evalNode("typeHandlers"));
-      // 映射器
+      // 映射器，在这里开始解析注册的 Mapper接口和 Mapper.xml文件
       mapperElement(root.evalNode("mappers"));
     } catch (Exception e) {
       throw new BuilderException("Error parsing SQL Mapper Configuration. Cause: " + e, e);
@@ -407,7 +407,7 @@ public class XMLConfigBuilder extends BaseBuilder {
           // 创建DataSourceFactory和DataSource
           DataSourceFactory dsFactory = dataSourceElement(child.evalNode("dataSource"));
           DataSource dataSource = dsFactory.getDataSource();
-          // 创建Environment
+          // 创建Environment,建造者模式:给environment的属性设置值
           Environment.Builder environmentBuilder = new Environment.Builder(id)
               .transactionFactory(txFactory)
               .dataSource(dataSource);

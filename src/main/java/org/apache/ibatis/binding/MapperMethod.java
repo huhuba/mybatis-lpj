@@ -96,8 +96,8 @@ public class MapperMethod {
           result = executeForCursor(sqlSession, args);
         } else {// 处理返回值为单一对象的方法
 
-          Object param = method.convertArgsToSqlCommandParam(args);
-          result = sqlSession.selectOne(command.getName(), param);
+          Object param = method.convertArgsToSqlCommandParam(args);//名称为param１，param２的参数就是在该方法中处理的
+          result = sqlSession.selectOne(command.getName(), param);//开始执行查询
           if (method.returnsOptional()
               && (result == null || !method.getReturnType().equals(result.getClass()))) {
             result = Optional.ofNullable(result);
@@ -346,7 +346,7 @@ public class MapperMethod {
       this.returnsVoid = void.class.equals(this.returnType);
       this.returnsMany = configuration.getObjectFactory().isCollection(this.returnType) || this.returnType.isArray();
       this.returnsCursor = Cursor.class.equals(this.returnType);
-      this.returnsOptional = Optional.class.equals(this.returnType);
+       this.returnsOptional = Optional.class.equals(this.returnType);
       // 若MethodSignature对应方法的返回值是Map且制定了@MapKey注解，则使用getMapKey方法处理。Q:@MapKey有什么作用？
       this.mapKey = getMapKey(method);
       this.returnsMap = this.mapKey != null;

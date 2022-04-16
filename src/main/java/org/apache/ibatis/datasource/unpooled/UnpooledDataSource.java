@@ -264,7 +264,7 @@ public class UnpooledDataSource implements DataSource {
       }
     }
   }
-
+  /** <ul><li>设置超时时间</li><li>设置是否自动提交</li><li>设置隔离级别</li></ul> **/
   private void configureConnection(Connection conn) throws SQLException {
     if (defaultNetworkTimeout != null) {
       conn.setNetworkTimeout(Executors.newSingleThreadExecutor(), defaultNetworkTimeout);

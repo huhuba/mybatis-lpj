@@ -290,7 +290,7 @@ public class XPathParser {
           // NOP
         }
       });
-      // 加载xml文件
+      // 加载xml文件，即将输入流封装成Document对象
       return builder.parse(inputSource);
     } catch (Exception e) {
       throw new BuilderException("Error creating document instance.  Cause: " + e, e);

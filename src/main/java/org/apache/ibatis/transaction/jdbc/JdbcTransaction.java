@@ -146,8 +146,8 @@ public class JdbcTransaction implements Transaction {
     connection = dataSource.getConnection();
     if (level != null) {
       connection.setTransactionIsolation(level.getLevel());
-    }
-    setDesiredAutoCommit(autoCommit);
+    }//Desired：想要的
+    setDesiredAutoCommit(autoCommit);//设置是否自动提交
   }
 
   @Override

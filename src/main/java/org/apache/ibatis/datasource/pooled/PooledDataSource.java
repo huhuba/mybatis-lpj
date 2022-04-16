@@ -102,7 +102,7 @@ public class PooledDataSource implements DataSource {
 
   @Override
   public Connection getConnection() throws SQLException {
-    // 覆盖了DataSource.getConnection方法，每次都是pop一个Connection，即从池中取出一个来
+    // 覆盖了DataSource.getConnection方法，每次都是pop一个Connection（获取一个空闲连接），即从池中取出一个来
     return popConnection(dataSource.getUsername(), dataSource.getPassword()).getProxyConnection();
   }
 
@@ -463,7 +463,7 @@ public class PooledDataSource implements DataSource {
         // 检测空闲连接
         if (!state.idleConnections.isEmpty()) {
           // Pool has available connection
-          // 获取连接
+          // 空闲连接中返回删除一个链接，获取连接
           conn = state.idleConnections.remove(0);
           if (log.isDebugEnabled()) {
             log.debug("Checked out connection " + conn.getRealHashCode() + " from pool.");

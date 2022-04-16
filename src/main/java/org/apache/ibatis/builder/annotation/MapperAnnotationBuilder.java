@@ -116,15 +116,15 @@ public class MapperAnnotationBuilder {
     String resource = type.toString();
     // 检测是否已经加载过该接口
     if (!configuration.isResourceLoaded(resource)) {
-      // 检测是否加载过对应的映射配置文件，如果未加载，则创建XMLMapperBuilder对象解析对应的映射文件
+      // 检测是否加载过对应的映射配置文件，如果未加载，则创建XMLMapperBuilder对象解析对应的映射文件(Mapper.xml文件)，解析Mapper文件中所有的sql语句，并为每一条sql语句，创建MappedStatement
       loadXmlResource();
-      configuration.addLoadedResource(resource);
+      configuration.addLoadedResource(resource);//将解析过的Mapper接口保存到loadedResources（Set结构）  集合中
       assistant.setCurrentNamespace(type.getName());
-      // 解析@CacheNamespace注解
+      //解析完Mapper.xml文件中的元素之后，开始解析Mapper接口的注解// 解析@CacheNamespace注解
       parseCache();
       // 解析@CacheNamespaceRef注解
       parseCacheRef();
-      for (Method method : type.getMethods()) {
+      for (Method method : type.getMethods()) {//处理Mapper接口中的有的方法
         if (!canHaveStatement(method)) {
           continue;
         }
@@ -169,10 +169,10 @@ public class MapperAnnotationBuilder {
     // Spring may not know the real resource name so we check a flag
     // to prevent loading again a resource twice
     // this flag is set at XMLMapperBuilder#bindMapperForNamespace
-    if (!configuration.isResourceLoaded("namespace:" + type.getName())) {
-      String xmlResource = type.getName().replace('.', '/') + ".xml";
+    if (!configuration.isResourceLoaded("namespace:" + type.getName())) {//带点的路径，替换成带'/'的路径
+      String xmlResource = type.getName().replace('.', '/') + ".xml";//这里就是Mapper接口和Mapper对象名字和路径必须一样的原因
       // #1347
-      InputStream inputStream = type.getResourceAsStream("/" + xmlResource);
+      InputStream inputStream = type.getResourceAsStream("/" + xmlResource);//将对应的Mapper.xml文件作为一个输入流读进来
       if (inputStream == null) {
         // Search XML mapper that is not in the module but in the classpath.
         try {
@@ -181,9 +181,9 @@ public class MapperAnnotationBuilder {
           // ignore, resource is not required
         }
       }
-      if (inputStream != null) {
+      if (inputStream != null) {//创建XMLMapperBuilder，用来解析Mapper.xml
         XMLMapperBuilder xmlParser = new XMLMapperBuilder(inputStream, assistant.getConfiguration(), xmlResource, configuration.getSqlFragments(), type.getName());
-        xmlParser.parse();
+        xmlParser.parse();//解析Mapper文件中所有的sql语句，并为每一条sql语句，创建MappedStatement
       }
     }
   }

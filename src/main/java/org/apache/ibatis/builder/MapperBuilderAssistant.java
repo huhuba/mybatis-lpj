@@ -50,7 +50,7 @@ import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 
 /**
- * 映射构建器助手，建造者模式,继承BaseBuilder
+ * <ul>映射构建器助手，建造者模式,继承BaseBuilder</ul>
  *
  * @author Clinton Begin
  */
@@ -295,7 +295,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
     // 是否是select语句
     boolean isSelect = sqlCommandType == SqlCommandType.SELECT;
 
-    // 建造者模式
+    // 建造者模式，不同的方法，为新建的MappedStatement对象，添加不同的属性
     MappedStatement.Builder statementBuilder = new MappedStatement.Builder(configuration, id, sqlSource, sqlCommandType)
         .resource(resource)
         .fetchSize(fetchSize)
@@ -307,18 +307,18 @@ public class MapperBuilderAssistant extends BaseBuilder {
         .databaseId(databaseId)
         .lang(lang)
         .resultOrdered(resultOrdered)
-        .resultSets(resultSets)
-        .resultMaps(getStatementResultMaps(resultMap, resultType, id))
-        .resultSetType(resultSetType)
+        .resultSets(resultSets)//结果集
+        .resultMaps(getStatementResultMaps(resultMap, resultType, id))//sql语句，返回的结果Map
+        .resultSetType(resultSetType)//返回的结果集类型
         .flushCacheRequired(valueOrDefault(flushCache, !isSelect))
         .useCache(valueOrDefault(useCache, isSelect))
         .cache(currentCache);
-
+  //语句入参的Map
     ParameterMap statementParameterMap = getStatementParameterMap(parameterMap, parameterType, id);
     if (statementParameterMap != null) {
       statementBuilder.parameterMap(statementParameterMap);
     }
-
+//创建MappedStatement：已经设置好了输入参数和返回类型
     MappedStatement statement = statementBuilder.build();
     configuration.addMappedStatement(statement);
     return statement;
@@ -423,13 +423,13 @@ public class MapperBuilderAssistant extends BaseBuilder {
         }
       }
     } else if (resultType != null) {
-      ResultMap inlineResultMap = new ResultMap.Builder(
+      ResultMap inlineResultMap = new ResultMap.Builder(//建造者模式，每次都新建一个ResultMap对象，不同的方法为新的ResultMpa对象赋值不同的属性
           configuration,
           statementId + "-Inline",
           resultType,
           new ArrayList<>(),
           null).build();
-      resultMaps.add(inlineResultMap);
+      resultMaps.add(inlineResultMap);//新建的ResultMap对象：inlineResultMap，添加到集合中
     }
     return resultMaps;
   }

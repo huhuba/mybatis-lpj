@@ -33,7 +33,7 @@ import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
 /**
- * 预处理语句处理器(PREPARED)
+ * <ul>预处理语句处理器(PREPARED)</ul>
  *
  * @author Clinton Begin
  */
@@ -60,12 +60,12 @@ public class PreparedStatementHandler extends BaseStatementHandler {
     PreparedStatement ps = (PreparedStatement) statement;
     ps.addBatch();
   }
-
+  /** 开始执行sql查询 **/
   @Override
   public <E> List<E> query(Statement statement, ResultHandler resultHandler) throws SQLException {
     PreparedStatement ps = (PreparedStatement) statement;
-    ps.execute();
-    return resultSetHandler.handleResultSets(ps);
+    ps.execute();//PS:PreparedStatement,java的类.ps.execute()方法说明
+    return resultSetHandler.handleResultSets(ps);//处理返回的结果,将datasource返回的字节信息封装成相应的对象
   }
 
   @Override

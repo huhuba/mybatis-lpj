@@ -155,7 +155,7 @@ public class Configuration {
   protected Class<?> configurationFactory;
 
   protected final MapperRegistry mapperRegistry = new MapperRegistry(this);
-  protected final InterceptorChain interceptorChain = new InterceptorChain();
+  protected final InterceptorChain interceptorChain = new InterceptorChain();//拦截器
   //类型处理器注册机
   protected final TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry(this);
   //类型别名注册机
@@ -170,9 +170,9 @@ public class Configuration {
   protected final Map<String, Cache> caches = new StrictMap<>("Caches collection");
   //结果映射,存在Map里
   protected final Map<String, ResultMap> resultMaps = new StrictMap<>("Result Maps collection");
-  protected final Map<String, ParameterMap> parameterMaps = new StrictMap<>("Parameter Maps collection");
-  protected final Map<String, KeyGenerator> keyGenerators = new StrictMap<>("Key Generators collection");
-
+  protected final Map<String, ParameterMap> parameterMaps = new StrictMap<>("Parameter Maps collection");//参数映射
+  protected final Map<String, KeyGenerator> keyGenerators = new StrictMap<>("Key Generators collection");//键值生成器
+/** 保存加载过的资源 **/
   protected final Set<String> loadedResources = new HashSet<>();
   protected final Map<String, XNode> sqlFragments = new StrictMap<>("XML fragments parsed from previous mappers");
 
@@ -700,7 +700,7 @@ public class Configuration {
     } else {
       executor = new SimpleExecutor(this, transaction);
     }
-    // 根据配置决定是否开启二级缓存的功能
+    // 根据配置决定是否开启二级缓存的功能,Q:二级缓存不是名称空间缓存吗？  缓存空间和执行器executor是什么关系？
     if (cacheEnabled) {
       executor = new CachingExecutor(executor);
     }
@@ -844,7 +844,7 @@ public class Configuration {
 
   public MappedStatement getMappedStatement(String id, boolean validateIncompleteStatements) {
     //先构建所有语句，再返回语句
-    if (validateIncompleteStatements) {
+    if (validateIncompleteStatements) {//如果存在未创建完的statement,就执行里边的方法把所有的statement创建完毕
       buildAllStatements();
     }
     return mappedStatements.get(id);

@@ -48,7 +48,7 @@ public final class MappedStatement {
   private Cache cache;//二级缓存
   private ParameterMap parameterMap;
   private List<ResultMap> resultMaps;
-  private boolean flushCacheRequired;
+  private boolean flushCacheRequired;//是否需要属性缓存？
   private boolean useCache;
   private boolean resultOrdered;
   // SQL的类型
@@ -68,7 +68,7 @@ public final class MappedStatement {
 
   //静态内部类，建造者模式
   public static class Builder {
-    private MappedStatement mappedStatement = new MappedStatement();
+    private MappedStatement mappedStatement = new MappedStatement();//每次进来，都创建一个新MappedStatement对象
 
     public Builder(Configuration configuration, String id, SqlSource sqlSource, SqlCommandType sqlCommandType) {
       mappedStatement.configuration = configuration;

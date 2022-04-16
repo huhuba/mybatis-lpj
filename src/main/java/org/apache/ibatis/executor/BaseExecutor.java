@@ -60,13 +60,13 @@ public abstract class BaseExecutor implements Executor {
 
   // 延迟加载队列（线程安全）
   protected ConcurrentLinkedQueue<DeferredLoad> deferredLoads;
-  // 一级缓存，用于缓存该Executor对象查询结果集映射得到的结果对象
+  // 一级缓存，用于缓存该Executor对象查询结果集映射得到的结果对象，Executor和 当前的session是什么关系？一对一？
   protected PerpetualCache localCache;
   // 一级缓存，用于缓存输出类型的参数
   protected PerpetualCache localOutputParameterCache;
   protected Configuration configuration;
 
-  // 用来记录嵌套查询的层数
+  /** 用来记录嵌套查询的层数**/
   protected int queryStack;
   private boolean closed;
 
@@ -176,7 +176,7 @@ public abstract class BaseExecutor implements Executor {
       if (list != null) {
         // 针对存储过程调用的处理，在一级缓存命中时，获取缓存中保存的输出类型参数，并设置到用户传入的实参对象中
         handleLocallyCachedOutputParameters(ms, key, parameter, boundSql);
-      } else {
+      } else {//没有缓存
         // 调用doQuery方法完成数据库查询，并得到映射后的结果对象
         list = queryFromDatabase(ms, parameter, rowBounds, resultHandler, key, boundSql);
       }
@@ -192,7 +192,7 @@ public abstract class BaseExecutor implements Executor {
       // issue #601
       // 加载完成后，清空deferredLoads集合
       deferredLoads.clear();
-      if (configuration.getLocalCacheScope() == LocalCacheScope.STATEMENT) {
+      if (configuration.getLocalCacheScope() == LocalCacheScope.STATEMENT) {//缓存范围为STATEMENT的时候，不缓存
         // issue #482
         // 根据LocalCacheScope配置决定是否清空一级缓存
         clearLocalCache();
@@ -379,7 +379,7 @@ public abstract class BaseExecutor implements Executor {
       localCache.removeObject(key);
     }
     // 将真正的结果对象添加到一级缓存中
-    localCache.putObject(key, list);
+    localCache.putObject(key, list);//一级缓存，默认是session，可以调整成statement
     // 是否未存储过程调用
     if (ms.getStatementType() == StatementType.CALLABLE) {
       // 缓存输出类型的参数

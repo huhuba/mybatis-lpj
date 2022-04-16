@@ -97,7 +97,7 @@ public class ResolverUtil<T> {
     private Class<?> parent;
 
     /**
-     * 在构造方法中初始化parent字段
+     * <UL>在构造方法中初始化parent字段</UL>
      *
      * Constructs an IsA test using the supplied Class as the parent class/interface.
      *

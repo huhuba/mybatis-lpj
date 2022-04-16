@@ -72,7 +72,7 @@ public class DefaultParameterHandler implements ParameterHandler {
     List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
     // 检测parameterMappings集合是否为空
     if (parameterMappings != null) {
-      for (int i = 0; i < parameterMappings.size(); i++) {
+      for (int i = 0; i < parameterMappings.size(); i++) {//遍历替换sql中的占位符
         ParameterMapping parameterMapping = parameterMappings.get(i);
         // 过滤掉存储过程中的输出参数
         if (parameterMapping.getMode() != ParameterMode.OUT) {

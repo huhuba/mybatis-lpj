@@ -102,7 +102,7 @@ public class DefaultSqlSessionFactory implements SqlSessionFactory {
       // 创建Transaction对象
       tx = transactionFactory.newTransaction(environment.getDataSource(), level, autoCommit);
       // 根据配置创建Executor对象
-      final Executor executor = configuration.newExecutor(tx, execType);
+      final Executor executor = configuration.newExecutor(tx, execType);//1：确认执行器类型： SIMPLE,REUSR,BATCH;2：是否启用二级缓存；3：调用执行插件
       //然后产生一个DefaultSqlSession
       return new DefaultSqlSession(configuration, executor, autoCommit);
     } catch (Exception e) {
@@ -143,7 +143,7 @@ public class DefaultSqlSessionFactory implements SqlSessionFactory {
     }
   }
 
-  private TransactionFactory getTransactionFactoryFromEnvironment(Environment environment) {
+    private TransactionFactory getTransactionFactoryFromEnvironment(Environment environment) {
     //如果没有配置事务工厂，则返回托管事务工厂
     if (environment == null || environment.getTransactionFactory() == null) {
       return new ManagedTransactionFactory();

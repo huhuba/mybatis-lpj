@@ -81,7 +81,7 @@ public class Plugin implements InvocationHandler {
     }
   }
 
-  //取得签名Map
+  //取得签名Map(PS:注解 @Interceptor修饰的Method的签名Map)
   private static Map<Class<?>, Set<Method>> getSignatureMap(Interceptor interceptor) {
     // 取Intercepts注解
     Intercepts interceptsAnnotation = interceptor.getClass().getAnnotation(Intercepts.class);

@@ -74,7 +74,7 @@ public abstract class BaseStatementHandler implements StatementHandler {
     }
 
     this.boundSql = boundSql;
-
+     //此两个Handler生成处，都用到了拦截器链插件
     // 生成parameterHandler
     this.parameterHandler = configuration.newParameterHandler(mappedStatement, parameterObject, boundSql);
     // 生成resultSetHandler

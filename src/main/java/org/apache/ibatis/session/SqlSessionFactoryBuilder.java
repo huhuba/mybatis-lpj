@@ -86,7 +86,7 @@ public class SqlSessionFactoryBuilder {
     try {
       // 前戏：准备工作：将配置文件加载到内存中并生成一个document对象 ，同时初始化Configuration对象
       XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, environment, properties);
-      return build(parser.parse());
+      return build(parser.parse());//将MyBatis配置文件和Mapper接口与Mapper.xml文件解析完成以后，创建SqlSessionFactory（实际是：DefaultSqlSessionFactory对象）对象并返回
     } catch (Exception e) {
       throw ExceptionFactory.wrapException("Error building SqlSession.", e);
     } finally {

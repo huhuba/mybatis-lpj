@@ -54,7 +54,7 @@ public class MapperRegistry {
       throw new BindingException("Type " + type + " is not known to the MapperRegistry.");
     }
     try {
-      // 创建实现了type接口的代理对象
+      // 创建实现了type接口的代理对象（创建了Mapper接口的代理对象）
       return mapperProxyFactory.newInstance(sqlSession);
     } catch (Exception e) {
       throw new BindingException("Error getting mapper instance. Cause: " + e, e);
@@ -81,7 +81,7 @@ public class MapperRegistry {
         // otherwise the binding may automatically be attempted by the
         // mapper parser. If the type is already known, it won't try.
         MapperAnnotationBuilder parser = new MapperAnnotationBuilder(config, type);
-        parser.parse();
+        parser.parse();//开始解析对应的Mapper接口和Mapper.xml文件对象
         loadCompleted = true;
       } finally {
         // 如果加载过程中出现异常需要再将这个mapper从mybatis中删除
@@ -114,9 +114,9 @@ public class MapperRegistry {
   public void addMappers(String packageName, Class<?> superType) {
     // 查找包下所有是superType的类
     ResolverUtil<Class<?>> resolverUtil = new ResolverUtil<>();
-    resolverUtil.find(new ResolverUtil.IsA(superType), packageName);
+    resolverUtil.find(new ResolverUtil.IsA(superType), packageName);//扫描出包内所有的符合条件的接口
     Set<Class<? extends Class<?>>> mapperSet = resolverUtil.getClasses();
-    for (Class<?> mapperClass : mapperSet) {
+    for (Class<?> mapperClass : mapperSet) {//遍历所以接口
       addMapper(mapperClass);
     }
   }

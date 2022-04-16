@@ -23,9 +23,9 @@ import java.util.StringJoiner;
 import org.apache.ibatis.reflection.ArrayUtil;
 
 /**
- * 缓存key
+ * <ul>缓存key
  * 一般缓存框架的数据结构基本上都是 Key-Value 方式存储，
- * MyBatis 对于其 Key 的生成采取规则为：[mappedStementId + offset + limit + SQL + queryParams + environment]生成一个哈希码
+ * MyBatis 对于其 Key 的生成采取规则为：[mappedStementId + offset + limit + SQL + queryParams + environment]生成一个哈希码</ul>
  *
  * @author Clinton Begin
  */

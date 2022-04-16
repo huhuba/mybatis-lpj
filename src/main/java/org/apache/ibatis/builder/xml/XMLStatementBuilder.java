@@ -92,7 +92,7 @@ public class XMLStatementBuilder extends BaseBuilder {
     boolean resultOrdered = context.getBooleanAttribute("resultOrdered", false);
 
     // Include Fragments before parsing
-    // 在解析SQL语句之前，先处理其中的include节点
+    // 在解析SQL语句之前，先处理其中的include节点:select子节点
     XMLIncludeTransformer includeParser = new XMLIncludeTransformer(configuration, builderAssistant);
     includeParser.applyIncludes(context.getNode());
 
@@ -105,7 +105,7 @@ public class XMLStatementBuilder extends BaseBuilder {
     LanguageDriver langDriver = getLanguageDriver(lang);
 
     // Parse selectKey after includes and remove them.
-    //解析之前先解析<selectKey>
+    //解析之前先解析<selectKey>：insert标签下的
     processSelectKeyNodes(id, parameterTypeClass, langDriver);
 
     // Parse the SQL (pre: <selectKey> and <include> were parsed and removed)
@@ -126,8 +126,8 @@ public class XMLStatementBuilder extends BaseBuilder {
     //解析成SqlSource，一般是DynamicSqlSource
     SqlSource sqlSource = langDriver.createSqlSource(configuration, context, parameterTypeClass);
     //语句类型, STATEMENT|PREPARED|CALLABLE 的一种
-    StatementType statementType = StatementType.valueOf(context.getStringAttribute("statementType", StatementType.PREPARED.toString()));
-    // 获取每次批量返回的结果行数
+     StatementType statementType = StatementType.valueOf(context.getStringAttribute("statementType", StatementType.PREPARED.toString()));
+    // 获取每次批量返回的结果行数，fetch:拿来
     Integer fetchSize = context.getIntAttribute("fetchSize");
     // 获取超时时间
     Integer timeout = context.getIntAttribute("timeout");
@@ -151,7 +151,7 @@ public class XMLStatementBuilder extends BaseBuilder {
     String keyColumn = context.getStringAttribute("keyColumn");
     String resultSets = context.getStringAttribute("resultSets");
 
-    // 通过MapperBuilderAssistant创建MappedStatement对象，并添加到mappedStatements集合中保存
+    // 通过MapperBuilderAssistant创建MappedStatement对象，并添加到mappedStatements集合中保存：会设置好输入参数和返回类型、元素的属性和子节点
     builderAssistant.addMappedStatement(id, sqlSource, statementType, sqlCommandType,
         fetchSize, timeout, parameterMap, parameterTypeClass, resultMap, resultTypeClass,
         resultSetTypeEnum, flushCache, useCache, resultOrdered,
@@ -231,10 +231,10 @@ public class XMLStatementBuilder extends BaseBuilder {
     }
     if (databaseId != null) {
       return false;
-    }
+    }//应用当前的命名空间：给sql的id前加上命名空间的前缀，findEmpByEmpno-->com.mashibing.dao.EmpDao.findEmpByEmpno
     id = builderAssistant.applyCurrentNamespace(id, false);
     if (!this.configuration.hasStatement(id, false)) {
-      return true;
+      return true;//判断该id的sql是否已经创建过，没有创建过，则返回true
     }
     // skip this statement if there is a previous one with a not null databaseId
     MappedStatement previous = this.configuration.getMappedStatement(id, false); // issue #2
